@@ -4,12 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="Fetch update">
-      <change afterPath="$PROJECT_DIR$/examples/data_definition/5-1_table_basics.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/data_definition/5-2_default_values.sql" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/examples/data_definition/init_db.sh" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="Data definition examples">
+      <change afterPath="$PROJECT_DIR$/examples/data_definition/5-3_generated_columns.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/examples/data_definition/5-2_default_values.sql" beforeDir="false" afterPath="$PROJECT_DIR$/examples/data_definition/5-2_default_values.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -43,7 +41,7 @@
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "database.query.execution",
+    "settings.editor.selected.configurable": "SQL Dialects",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
@@ -77,6 +75,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Docker.docker-compose.yml.postgres: Compose Deployment" />
         <item itemvalue="Docker.docker-compose.yml: Compose Deployment" />
       </list>
     </recent_temporary>
@@ -92,6 +91,7 @@
       <workItem from="1699046214419" duration="61000" />
       <workItem from="1699046293869" duration="2495000" />
       <workItem from="1699219274833" duration="292000" />
+      <workItem from="1699718956394" duration="27000" />
     </task>
     <servers />
   </component>
@@ -112,7 +112,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="PostgreSQL documentation tutorial examples" />
     <MESSAGE value="Fetch update" />
-    <option name="LAST_COMMIT_MESSAGE" value="Fetch update" />
+    <MESSAGE value="Data definition examples" />
+    <option name="LAST_COMMIT_MESSAGE" value="Data definition examples" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
