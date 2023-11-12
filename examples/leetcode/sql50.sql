@@ -152,3 +152,7 @@ SELECT sd.student_id,
 FROM subjects sb
          CROSS JOIN students sd
 ORDER BY sd.student_id, sb.subject_name;
+
+DROP TABLE subjects;
+DROP TABLE examinations;
+DROP TABLE students;
