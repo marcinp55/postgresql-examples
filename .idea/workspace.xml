@@ -4,10 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="Data definition examples">
-      <change afterPath="$PROJECT_DIR$/examples/data_definition/5-3_generated_columns.sql" afterDir="false" />
+    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="Default values, generated columns">
+      <change afterPath="$PROJECT_DIR$/.idea/codeStyles/codeStyleConfig.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/examples/leetcode/init_db.sh" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/examples/leetcode/sql50.sql" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/examples/data_definition/5-2_default_values.sql" beforeDir="false" afterPath="$PROJECT_DIR$/examples/data_definition/5-2_default_values.sql" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -35,16 +36,22 @@
     "WebServerToolWindowFactoryState": "false",
     "git-widget-placeholder": "main",
     "ignore_missing_gitignore": "true",
-    "last_opened_file_path": "/home/marcin/Development/postgresql-examples",
+    "last_opened_file_path": "/home/marcin/Development/postgresql-examples/examples/leetcode",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "SQL Dialects",
+    "settings.editor.selected.configurable": "preferences.sourceCode.General",
+    "sql.codeStylePanel.last.previewDialect": "PostgreSQL",
     "vue.rearranger.settings.migration": "true"
   }
 }]]></component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/examples/leetcode" />
+    </key>
+  </component>
   <component name="RunManager" selected="Docker.docker-compose.yml: Compose Deployment">
     <configuration default="true" type="docker-deploy" factoryName="docker-compose.yml" temporary="true">
       <deployment type="docker-compose.yml">
@@ -113,7 +120,8 @@
     <MESSAGE value="PostgreSQL documentation tutorial examples" />
     <MESSAGE value="Fetch update" />
     <MESSAGE value="Data definition examples" />
-    <option name="LAST_COMMIT_MESSAGE" value="Data definition examples" />
+    <MESSAGE value="Default values, generated columns" />
+    <option name="LAST_COMMIT_MESSAGE" value="Default values, generated columns" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
