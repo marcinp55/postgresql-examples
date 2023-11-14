@@ -245,30 +245,101 @@ VALUES (2, '2021-01-22 00:00:00', 'confirmed');
 INSERT INTO Confirmations (user_id, time_stamp, action)
 VALUES (2, '2021-02-28 23:59:59', 'timeout');
 
--- TODO Solution --
-WITH confirmed_count AS (SELECT s.user_id,
-                                COUNT(c.action) AS confirmed
-                         FROM signups s
-                                  LEFT JOIN confirmations c ON s.user_id = c.user_id
-                         WHERE c.action = 'confirmed'
-                         GROUP BY s.user_id),
-     total_count AS (SELECT s.user_id,
-                            COUNT(c.action) AS total
-                     FROM signups s
-                              LEFT JOIN confirmations c ON s.user_id = c.user_id
-                     GROUP BY s.user_id),
-     no_confirm_count AS (SELECT s.user_id,
-                                 0 AS confirmation_rate
-                          FROM signups s
-                                   LEFT JOIN confirmations c ON s.user_id = c.user_id
-                          WHERE c.action IS NULL)
-SELECT c.user_id,
-       CASE
-           WHEN c.confirmed IS NOT NULL THEN ROUND(CAST(c.confirmed AS numeric) / CAST(t.total AS numeric), 2)
-           ELSE 0
-           END AS confirmation_rate
-FROM confirmed_count c
-         JOIN total_count t ON c.user_id = t.user_id
-UNION ALL
+-- Solution --
+
+SELECT user_id,
+       ROUND(
+                   (SELECT CAST(COUNT(*) AS numeric)
+                    FROM confirmations c
+                    WHERE c.user_id = s.user_id
+                      AND action = 'confirmed')
+                   /
+                   (SELECT CASE WHEN COUNT(*) = 0 THEN 1 ELSE CAST(COUNT(*) AS numeric) END
+                    FROM confirmations c
+                    WHERE c.user_id = s.user_id),
+                   2) AS confirmation_rate
+FROM signups s
+GROUP BY user_id;
+
+DROP TABLE confirmations;
+DROP TABLE signups;
+DROP TYPE confirmations_action;
+
+-- 620. Not Boring Movies --
+-- https://leetcode.com/problems/not-boring-movies/
+CREATE TABLE IF NOT EXISTS cinema
+(
+    id          int,
+    movie       varchar(255),
+    description varchar(255),
+    rating      numeric(2, 1)
+);
+TRUNCATE TABLE cinema;
+INSERT INTO cinema (id, movie, description, rating)
+VALUES (1, 'War', 'Great 3D', 8.9);
+INSERT INTO cinema (id, movie, description, rating)
+VALUES (2, 'Science', 'Fiction', 8.5);
+INSERT INTO cinema (id, movie, description, rating)
+VALUES (3, 'Irish', 'boring', 6.2);
+INSERT INTO cinema (id, movie, description, rating)
+VALUES (4, 'Ice Song', 'Fantasy', 8.6);
+INSERT INTO cinema (id, movie, description, rating)
+VALUES (5, 'House Card', 'Interesting', 9.1);
+
+-- Solution --
+
 SELECT *
-FROM no_confirm_count;
+FROM cinema
+WHERE id % 2 <> 0
+  AND description <> 'boring'
+ORDER BY rating DESC;
+
+DROP TABLE cinema;
+
+-- 1251. Average Selling Price --
+-- https://leetcode.com/problems/average-selling-price/
+CREATE TABLE IF NOT EXISTS Prices
+(
+    product_id int,
+    start_date date,
+    end_date   date,
+    price      int
+);
+CREATE TABLE IF NOT EXISTS UnitsSold
+(
+    product_id    int,
+    purchase_date date,
+    units         int
+);
+TRUNCATE TABLE Prices;
+INSERT INTO Prices (product_id, start_date, end_date, price)
+VALUES (1, '2019-02-17', '2019-02-28', 5);
+INSERT INTO Prices (product_id, start_date, end_date, price)
+VALUES (1, '2019-03-01', '2019-03-22', 20);
+INSERT INTO Prices (product_id, start_date, end_date, price)
+VALUES (2, '2019-02-01', '2019-02-20', 15);
+INSERT INTO Prices (product_id, start_date, end_date, price)
+VALUES (2, '2019-02-21', '2019-03-31', 30);
+INSERT INTO Prices (product_id, start_date, end_date, price)
+VALUES (3, '2019-02-21', '2019-03-31', 30);
+TRUNCATE TABLE UnitsSold;
+INSERT INTO UnitsSold (product_id, purchase_date, units)
+VALUES (1, '2019-02-25', 100);
+INSERT INTO UnitsSold (product_id, purchase_date, units)
+VALUES (1, '2019-03-01', 15);
+INSERT INTO UnitsSold (product_id, purchase_date, units)
+VALUES (2, '2019-02-10', 200);
+INSERT INTO UnitsSold (product_id, purchase_date, units)
+VALUES (2, '2019-03-22', 30);
+
+-- Solution --
+-- Write a solution to find the average selling price for each product.
+-- average_price should be rounded to 2 decimal places.
+SELECT p.product_id,
+       COALESCE(ROUND(SUM(p.price * u.units) / SUM(CAST(units AS numeric)), 2), 0) AS average_price
+FROM unitssold u
+         RIGHT JOIN prices p ON u.product_id = p.product_id AND u.purchase_date BETWEEN p.start_date AND p.end_date
+GROUP BY p.product_id;
+
+DROP TABLE prices;
+DROP TABLE unitssold;
