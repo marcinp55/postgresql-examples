@@ -343,3 +343,145 @@ GROUP BY p.product_id;
 
 DROP TABLE prices;
 DROP TABLE unitssold;
+
+-- 1075. Project Employees I --
+-- https://leetcode.com/problems/project-employees-i/
+CREATE TABLE IF NOT EXISTS Project
+(
+    project_id  int,
+    employee_id int
+);
+CREATE TABLE IF NOT EXISTS Employee
+(
+    employee_id      int,
+    name             varchar(10),
+    experience_years int
+);
+TRUNCATE TABLE Project;
+INSERT INTO Project (project_id, employee_id)
+VALUES (1, 1);
+INSERT INTO Project (project_id, employee_id)
+VALUES (1, 2);
+INSERT INTO Project (project_id, employee_id)
+VALUES (1, 3);
+INSERT INTO Project (project_id, employee_id)
+VALUES (2, 1);
+INSERT INTO Project (project_id, employee_id)
+VALUES (2, 4);
+TRUNCATE TABLE Employee;
+INSERT INTO Employee (employee_id, name, experience_years)
+VALUES (1, 'Khaled', 3);
+INSERT INTO Employee (employee_id, name, experience_years)
+VALUES (2, 'Ali', 2);
+INSERT INTO Employee (employee_id, name, experience_years)
+VALUES (3, 'John', 1);
+INSERT INTO Employee (employee_id, name, experience_years)
+VALUES (4, 'Doe', 2);
+
+-- Solution --
+-- Write an SQL query that reports the average experience years of all the employees for each project,
+-- rounded to 2 digits.
+SELECT p.project_id,
+       ROUND(AVG(e.experience_years), 2) AS average_years
+FROM employee e
+         JOIN project p ON e.employee_id = p.employee_id
+GROUP BY p.project_id;
+
+DROP TABLE employee;
+DROP TABLE project;
+
+-- 1633. Percentage of Users Attended a Contest --
+-- https://leetcode.com/problems/percentage-of-users-attended-a-contest/
+CREATE TABLE IF NOT EXISTS Users
+(
+    user_id   int,
+    user_name varchar(20)
+);
+CREATE TABLE IF NOT EXISTS Register
+(
+    contest_id int,
+    user_id    int
+);
+TRUNCATE TABLE Users;
+INSERT INTO Users (user_id, user_name)
+VALUES (6, 'Alice');
+INSERT INTO Users (user_id, user_name)
+VALUES (2, 'Bob');
+INSERT INTO Users (user_id, user_name)
+VALUES (7, 'Alex');
+TRUNCATE TABLE Register;
+INSERT INTO Register (contest_id, user_id)
+VALUES (215, 6);
+INSERT INTO Register (contest_id, user_id)
+VALUES (209, 2);
+INSERT INTO Register (contest_id, user_id)
+VALUES (208, 2);
+INSERT INTO Register (contest_id, user_id)
+VALUES (210, 6);
+INSERT INTO Register (contest_id, user_id)
+VALUES (208, 6);
+INSERT INTO Register (contest_id, user_id)
+VALUES (209, 7);
+INSERT INTO Register (contest_id, user_id)
+VALUES (209, 6);
+INSERT INTO Register (contest_id, user_id)
+VALUES (215, 7);
+INSERT INTO Register (contest_id, user_id)
+VALUES (208, 7);
+INSERT INTO Register (contest_id, user_id)
+VALUES (210, 2);
+INSERT INTO Register (contest_id, user_id)
+VALUES (207, 2);
+INSERT INTO Register (contest_id, user_id)
+VALUES (210, 7);
+
+-- Solution --
+-- Write a solution to find the percentage of the users registered in each contest rounded to two decimals.
+-- Return the result table ordered by percentage in descending order.
+-- In case of a tie, order it by contest_id in ascending order.
+SELECT r.contest_id,
+       ROUND((COUNT(r.user_id) / CAST((SELECT COUNT(user_id) FROM users) AS numeric)) * 100, 2) AS percentage
+FROM register r
+         JOIN users u ON r.user_id = u.user_id
+GROUP BY r.contest_id
+ORDER BY 2 DESC, r.contest_id;
+
+DROP TABLE register;
+DROP TABLE users;
+
+-- 1211. Queries Quality and Percentage --
+-- https://leetcode.com/problems/queries-quality-and-percentage/
+CREATE TABLE IF NOT EXISTS Queries
+(
+    query_name varchar(30),
+    result     varchar(50),
+    position   int,
+    rating     int
+);
+TRUNCATE TABLE Queries;
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'Golden Retriever', 1, 5);
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'German Shepherd', 2, 5);
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Dog', 'Mule', 200, 1);
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Shirazi', 5, 2);
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Siamese', 3, 3);
+INSERT INTO Queries (query_name, result, position, rating)
+VALUES ('Cat', 'Sphynx', 7, 4);
+
+-- Solution --
+-- We define query quality as:
+-- The average of the ratio between query rating and its position.
+-- We also define poor query percentage as:
+-- The percentage of all queries with rating less than 3.
+-- Write a solution to find each query_name, the quality and poor_query_percentage.
+-- Both quality and poor_query_percentage should be rounded to 2 decimal places.
+SELECT query_name,
+       ROUND(AVG(rating / CAST(position AS numeric)), 2)                                          AS quality,
+       ROUND(COUNT(rating) FILTER ( WHERE rating < 3 ) / CAST(COUNT(rating) AS numeric) * 100,
+             2)                                                                                   AS poor_query_percentage
+FROM queries
+GROUP BY query_name;
