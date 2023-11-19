@@ -480,8 +480,88 @@ VALUES ('Cat', 'Sphynx', 7, 4);
 -- Write a solution to find each query_name, the quality and poor_query_percentage.
 -- Both quality and poor_query_percentage should be rounded to 2 decimal places.
 SELECT query_name,
-       ROUND(AVG(rating / CAST(position AS numeric)), 2)                                          AS quality,
+       ROUND(AVG(rating / CAST(position AS numeric)), 2) AS quality,
        ROUND(COUNT(rating) FILTER ( WHERE rating < 3 ) / CAST(COUNT(rating) AS numeric) * 100,
-             2)                                                                                   AS poor_query_percentage
+             2)                                          AS poor_query_percentage
 FROM queries
 GROUP BY query_name;
+
+DROP TABLE queries;
+
+-- 1193. Monthly Transactions I --
+-- https://leetcode.com/problems/monthly-transactions-i/
+CREATE TYPE state AS ENUM ('approved', 'declined');
+CREATE TABLE IF NOT EXISTS Transactions
+(
+    id         int,
+    country    varchar(4),
+    state      state,
+    amount     int,
+    trans_date date
+);
+TRUNCATE TABLE Transactions;
+INSERT INTO Transactions (id, country, state, amount, trans_date)
+VALUES (121, 'US', 'approved', 1000, '2018-12-18');
+INSERT INTO Transactions (id, country, state, amount, trans_date)
+VALUES (122, 'US', 'declined', 2000, '2018-12-19');
+INSERT INTO Transactions (id, country, state, amount, trans_date)
+VALUES (123, 'US', 'approved', 2000, '2019-01-01');
+INSERT INTO Transactions (id, country, state, amount, trans_date)
+VALUES (124, 'DE', 'approved', 2000, '2019-01-07');
+
+-- Solution --
+-- Write an SQL query to find for each month and country, the number of transactions
+-- and their total amount, the number of approved transactions and their total amount.
+SELECT TO_CHAR(t.trans_date, 'YYYY-MM')                                 AS month,
+       t.country,
+       COUNT(*)                                                         AS trans_count,
+       COUNT(*) FILTER ( WHERE t.state = 'approved' )                   AS approved_count,
+       SUM(t.amount)                                                    AS trans_total_amount,
+       COALESCE(SUM(t.amount) FILTER ( WHERE t.state = 'approved' ), 0) AS approved_total_amount
+FROM Transactions t
+GROUP BY 1, t.country;
+
+DROP TABLE transactions;
+DROP TYPE state;
+
+-- 1174. Immediate Food Delivery II --
+-- https://leetcode.com/problems/immediate-food-delivery-ii/
+CREATE TABLE IF NOT EXISTS Delivery
+(
+    delivery_id                 int,
+    customer_id                 int,
+    order_date                  date,
+    customer_pref_delivery_date date
+);
+TRUNCATE TABLE Delivery;
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (1, 1, '2019-08-01', '2019-08-02');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (2, 2, '2019-08-02', '2019-08-02');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (3, 1, '2019-08-11', '2019-08-12');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (4, 3, '2019-08-24', '2019-08-24');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (5, 3, '2019-08-21', '2019-08-22');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (6, 2, '2019-08-11', '2019-08-13');
+INSERT INTO Delivery (delivery_id, customer_id, order_date, customer_pref_delivery_date)
+VALUES (7, 4, '2019-08-09', '2019-08-09');
+
+-- Solution --
+-- If the customer's preferred delivery date is the same as the order date, then the order is
+-- called immediate; otherwise, it is called scheduled.
+-- The first order of a customer is the order with the earliest order date that the customer made.
+-- It is guaranteed that a customer has precisely one first order.
+-- Write a solution to find the percentage of immediate orders in the first orders of all customers,
+-- rounded to 2 decimal places.
+WITH order_types AS (SELECT customer_id,
+                            CASE
+                                WHEN MIN(order_date) = MIN(customer_pref_delivery_date) THEN 'immediate'
+                                ELSE 'scheduled'
+                                END AS order_type
+                     FROM delivery
+                     GROUP BY customer_id)
+SELECT ROUND(COUNT(*) FILTER ( WHERE order_type = 'immediate' ) / CAST(COUNT(*) AS numeric) * 100, 2) AS immediate_percentage
+FROM order_types;

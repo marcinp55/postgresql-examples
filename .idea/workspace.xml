@@ -4,9 +4,7 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="Default values, generated columns">
-      <change beforePath="$PROJECT_DIR$/examples/leetcode/sql50.sql" beforeDir="false" afterPath="$PROJECT_DIR$/examples/leetcode/sql50.sql" afterDir="false" />
-    </list>
+    <list default="true" id="46e74b33-6cad-430a-82fb-aa6c320bcce9" name="Changes" comment="SQL50 cd" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -119,7 +117,8 @@
     <MESSAGE value="Fetch update" />
     <MESSAGE value="Data definition examples" />
     <MESSAGE value="Default values, generated columns" />
-    <option name="LAST_COMMIT_MESSAGE" value="Default values, generated columns" />
+    <MESSAGE value="SQL50 cd" />
+    <option name="LAST_COMMIT_MESSAGE" value="SQL50 cd" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
