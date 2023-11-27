@@ -563,5 +563,124 @@ WITH order_types AS (SELECT customer_id,
                                 END AS order_type
                      FROM delivery
                      GROUP BY customer_id)
-SELECT ROUND(COUNT(*) FILTER ( WHERE order_type = 'immediate' ) / CAST(COUNT(*) AS numeric) * 100, 2) AS immediate_percentage
+SELECT ROUND(COUNT(*) FILTER ( WHERE order_type = 'immediate' ) / CAST(COUNT(*) AS numeric) * 100,
+             2) AS immediate_percentage
 FROM order_types;
+
+DROP TABLE delivery;
+
+-- 550. Game Play Analysis IV --
+-- https://leetcode.com/problems/game-play-analysis-iv/
+CREATE TABLE IF NOT EXISTS Activity
+(
+    player_id    int,
+    device_id    int,
+    event_date   date,
+    games_played int
+);
+TRUNCATE TABLE Activity;
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (1, 2, '2016-03-01', 5);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (1, 2, '2016-03-02', 6);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (2, 3, '2017-06-25', 1);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (3, 1, '2016-03-02', 0);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (3, 4, '2018-07-03', 5);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (4, 5, '2018-07-03', 5);
+INSERT INTO Activity (player_id, device_id, event_date, games_played)
+VALUES (4, 5, '2018-07-04', 15);
+
+-- Solution --
+-- Write a solution to report the fraction of players that logged in again on the day
+-- after the day they first logged in, rounded to 2 decimal places.
+-- In other words, you need to count the number of players that logged in for at least
+-- two consecutive days starting from their first login date,
+-- then divide that number by the total number of players.
+WITH player_min_dates AS (SELECT a.player_id,
+                                 MIN(a.event_date) AS min_event_date
+                          FROM activity a
+                          GROUP BY a.player_id),
+     all_players_count AS (SELECT COUNT(DISTINCT a.player_id)
+                           FROM activity a)
+SELECT ROUND(COUNT(DISTINCT a1.player_id) / CAST((SELECT * FROM all_players_count) AS numeric), 2) AS fraction
+FROM activity a1
+         JOIN player_min_dates p ON a1.player_id = p.player_id
+         JOIN activity a2 ON a1.player_id = a2.player_id AND a2.event_date = p.min_event_date + 1;
+
+DROP TABLE activity;
+
+-- 2356. Number of Unique Subjects Taught by Each Teacher --
+-- https://leetcode.com/problems/number-of-unique-subjects-taught-by-each-teacher/
+CREATE TABLE IF NOT EXISTS Teacher
+(
+    teacher_id int,
+    subject_id int,
+    dept_id    int
+);
+TRUNCATE TABLE Teacher;
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (1, 2, 3);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (1, 2, 4);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (1, 3, 3);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (2, 1, 1);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (2, 2, 1);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (2, 3, 1);
+INSERT INTO Teacher (teacher_id, subject_id, dept_id)
+VALUES (2, 4, 1);
+
+-- Solution --
+-- Write a solution to calculate the number of unique subjects each teacher teaches in the university. --
+SELECT t.teacher_id,
+       COUNT(DISTINCT t.subject_id) AS cnt
+FROM teacher t
+GROUP BY t.teacher_id;
+
+DROP TABLE teacher;
+
+-- 1141. User Activity for the Past 30 Days I --
+-- https://leetcode.com/problems/user-activity-for-the-past-30-days-i/
+CREATE TYPE activity_type AS enum ('open_session', 'end_session', 'scroll_down', 'send_message');
+CREATE TABLE IF NOT EXISTS Activity
+(
+    user_id       int,
+    session_id    int,
+    activity_date date,
+    activity_type activity_type
+);
+TRUNCATE TABLE Activity;
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (1, 1, '2019-07-20', 'open_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (1, 1, '2019-07-20', 'scroll_down');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (1, 1, '2019-07-20', 'end_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (2, 4, '2019-07-20', 'open_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (2, 4, '2019-07-21', 'send_message');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (2, 4, '2019-07-21', 'end_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (3, 2, '2019-07-21', 'open_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (3, 2, '2019-07-21', 'send_message');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (3, 2, '2019-07-21', 'end_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (4, 3, '2019-06-25', 'open_session');
+INSERT INTO Activity (user_id, session_id, activity_date, activity_type)
+VALUES (4, 3, '2019-06-25', 'end_session');
+
+-- Solution --
+-- Write a solution to find the daily active user count for a period of 30 days ending 2019-07-27 inclusively.
+-- A user was active on someday if they made at least one activity on that day.
+
